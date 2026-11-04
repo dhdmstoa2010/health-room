@@ -169,6 +169,8 @@ table.table { width: 100%; border-collapse: collapse; }
 .sheet table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .sheet th, .sheet td { border: 1px solid var(--black); padding: 4px 6px; height: 26px; }
 .sheet th { background: var(--gray-100); }
+.sheet table.approval { width: auto; flex: none; }
+.sheet table.approval th { min-width: 56px; }
 
 /* ---------- date picker ---------- */
 .datepicker-btn { display: flex; align-items: center; justify-content: space-between; gap: 10px; text-align: left; cursor: pointer; min-width: 140px; }

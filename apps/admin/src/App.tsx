@@ -27,7 +27,7 @@ const ROUTES: Record<string, ComponentType> = {
   settings: SettingsHub,
 }
 
-const currentPath = () => window.location.hash.replace(/^#\/?/, '') || 'dashboard'
+const currentPath = () => window.location.hash.replace(/^#\/?/, '').split('/')[0] || 'dashboard'
 
 export default function App() {
   const [path, setPath] = useState(currentPath)
