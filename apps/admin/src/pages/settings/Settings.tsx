@@ -1,6 +1,10 @@
+import { Card } from '@/components/ui/card'
+import { Input, NativeSelect } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-import { DEFAULT_SETTINGS, dateStr, useLogs, useSettings } from '../data'
-import { Field, PageHeader } from '../ui'
+import { DEFAULT_SETTINGS, dateStr, useLogs, useSettings } from '@/lib/data'
+import { Field } from '@/components/common/field'
+import { PageHeader } from '@/components/common/page-header'
 
 export default function Settings() {
   const [saved, setSaved] = useSettings()
@@ -33,29 +37,29 @@ export default function Settings() {
   return (
     <>
       <PageHeader title="환경설정" desc="운영 기준값 설정" />
-      <div className="card" style={{ maxWidth: 560 }}>
+      <Card  style={{ maxWidth: 560 }}>
         <Field label="보건일지 생성 건수" hint="일괄출력 시 1장에 표시할 행 수">
           <input type="number" className="input" min={1} max={100} value={draft.dailyRows} onChange={(e) => setDraft({ ...draft, dailyRows: Number(e.target.value) })} />
         </Field>
         <Field label="결재 라인" hint="쉼표로 구분 (예: 담당, 교감, 교장). 출력물 결재란에 표시됩니다.">
-          <input className="input" value={draft.approvalText} onChange={(e) => setDraft({ ...draft, approvalText: e.target.value })} />
+          <Input value={draft.approvalText} onChange={(e) => setDraft({ ...draft, approvalText: e.target.value })} />
         </Field>
         <Field label="통계 초기화 시점" hint="통계가 시작되는 월 (학년도 시작월)">
-          <select className="input" value={draft.statsResetMonth} onChange={(e) => setDraft({ ...draft, statsResetMonth: Number(e.target.value) })}>
+          <NativeSelect value={draft.statsResetMonth} onChange={(e) => setDraft({ ...draft, statsResetMonth: Number(e.target.value) })}>
             {Array.from({ length: 12 }, (_, i) => <option key={i} value={i + 1}>{i + 1}월</option>)}
-          </select>
+          </NativeSelect>
         </Field>
         <Field label="데이터 보관기간(년)">
           <input type="number" className="input" min={1} max={30} value={draft.retentionYears} onChange={(e) => setDraft({ ...draft, retentionYears: Number(e.target.value) })} />
         </Field>
         <div className="toolbar" style={{ marginBottom: 0 }}>
-          <button className="btn primary" onClick={save}>저장</button>
-          <button className="btn" onClick={() => setDraft({ ...DEFAULT_SETTINGS, approvalText: DEFAULT_SETTINGS.approvalLine.join(', ') })}>기본값</button>
+          <Button variant="default" onClick={save}>저장</Button>
+          <Button onClick={() => setDraft({ ...DEFAULT_SETTINGS, approvalText: DEFAULT_SETTINGS.approvalLine.join(', ') })}>기본값</Button>
           <span className="spacer" />
-          <button className="btn danger" onClick={purge}>보관기간 경과 데이터 삭제</button>
+          <Button variant="destructive" onClick={purge}>보관기간 경과 데이터 삭제</Button>
         </div>
         {message && <p style={{ marginTop: 12, color: 'var(--green-dark)' }}>{message}</p>}
-      </div>
+      </Card>
     </>
   )
 }

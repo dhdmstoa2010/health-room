@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { dateStr, pad, today } from './data'
+import { dateStr, pad, today } from '@/lib/data'
 
 const DOW = ['일', '월', '화', '수', '목', '금', '토']
 

@@ -1,4 +1,4 @@
-import type { HealthLog, MedUse, Purchase } from './data'
+import type { HealthLog, MedUse, Purchase } from '@/lib/data'
 
 /** 통계 초기화 시점(월)부터 시작하는 12개월 (학년도 기준) */
 export function academicMonths(year: number, resetMonth: number) {
