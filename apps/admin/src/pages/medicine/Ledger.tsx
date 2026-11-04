@@ -1,8 +1,13 @@
-import { DatePicker } from '../DatePicker'
+import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Card } from '@/components/ui/card'
+import { NativeSelect } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { DatePicker } from '@/components/common/date-picker'
 import { useMemo, useState } from 'react'
-import { today, useCodes, useLogs, usePurchases } from '../data'
-import { ledgerFor, stockOf } from '../stats'
-import { Empty, PageHeader } from '../ui'
+import { today, useCodes, useLogs, usePurchases } from '@/lib/data'
+import { ledgerFor, stockOf } from '@/lib/stats'
+import { Empty } from '@/components/common/empty'
+import { PageHeader } from '@/components/common/page-header'
 
 export default function Ledger() {
   const { items: codes } = useCodes()
@@ -32,38 +37,38 @@ export default function Ledger() {
     <>
       <PageHeader title="약품수불부" desc="약품별 입고·출고 내역" />
       <div className="grid side">
-        <div className="card">
+        <Card>
           <div className="toolbar">
-            <select className="input" value={medicineId} onChange={(e) => setMedicineId(e.target.value)}>
+            <NativeSelect value={medicineId} onChange={(e) => setMedicineId(e.target.value)}>
               {medicines.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
-            </select>
+            </NativeSelect>
             <DatePicker value={from} onChange={(v) => setFrom(v)} />
             <span>~</span>
             <DatePicker value={to} onChange={(v) => setTo(v)} />
           </div>
           <div className="table-wrap">
-            <table className="table">
-              <thead><tr><th>일자</th><th>구분</th><th>내용</th><th className="num">입고</th><th className="num">출고</th><th className="num">재고</th></tr></thead>
-              <tbody>
-                <tr><td colSpan={5} className="muted">이월 재고</td><td className="num">{rows.opening}</td></tr>
+            <Table>
+              <TableHeader><TableRow><TableHead>일자</TableHead><TableHead>구분</TableHead><TableHead>내용</TableHead><TableHead className="num">입고</TableHead><TableHead className="num">출고</TableHead><TableHead className="num">재고</TableHead></TableRow></TableHeader>
+              <TableBody>
+                <TableRow><TableCell colSpan={5} className="muted">이월 재고</TableCell><TableCell className="num">{rows.opening}</TableCell></TableRow>
                 {rows.inRange.map((e, i) => (
-                  <tr key={i}>
-                    <td>{e.date}</td>
-                    <td><span className={e.kind === '입고' ? 'badge' : 'badge dark'}>{e.kind}</span></td>
-                    <td>{e.note}</td>
-                    <td className="num">{e.kind === '입고' ? e.qty : ''}</td>
-                    <td className="num">{e.kind === '출고' ? e.qty : ''}</td>
-                    <td className="num">{e.balance}</td>
-                  </tr>
+                  <TableRow key={i}>
+                    <TableCell>{e.date}</TableCell>
+                    <TableCell><Badge variant={e.kind === '입고' ? 'secondary' : 'default'}>{e.kind}</Badge></TableCell>
+                    <TableCell>{e.note}</TableCell>
+                    <TableCell className="num">{e.kind === '입고' ? e.qty : ''}</TableCell>
+                    <TableCell className="num">{e.kind === '출고' ? e.qty : ''}</TableCell>
+                    <TableCell className="num">{e.balance}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-              <tfoot><tr><td colSpan={3}>합계</td><td className="num">{totalIn}</td><td className="num">{totalOut}</td><td className="num">{rows.opening + totalIn - totalOut}</td></tr></tfoot>
-            </table>
+              </TableBody>
+              <TableFooter><TableRow><TableCell colSpan={3}>합계</TableCell><TableCell className="num">{totalIn}</TableCell><TableCell className="num">{totalOut}</TableCell><TableCell className="num">{rows.opening + totalIn - totalOut}</TableCell></TableRow></TableFooter>
+            </Table>
             {!rows.inRange.length && <Empty>해당 기간 입출고 내역이 없습니다.</Empty>}
           </div>
-        </div>
+        </Card>
 
-        <div className="card">
+        <Card>
           <h2>현재 재고</h2>
           {medicines.map((m) => {
             const s = stockOf(m.id, logs, purchases)
@@ -74,7 +79,7 @@ export default function Ledger() {
               </div>
             )
           })}
-        </div>
+        </Card>
       </div>
     </>
   )

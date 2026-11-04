@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import About from './About'
 import Codes from './Codes'
@@ -19,7 +20,7 @@ export default function SettingsHub() {
     <>
       <div className="toolbar" style={{ borderBottom: '1px solid var(--gray-100)', paddingBottom: 12 }}>
         {TABS.map((t) => (
-          <button key={t.key} className={tab === t.key ? 'btn dark' : 'btn'} onClick={() => setTab(t.key)}>{t.label}</button>
+          <Button key={t.key} variant={tab === t.key ? 'default' : 'outline'} onClick={() => setTab(t.key)}>{t.label}</Button>
         ))}
       </div>
       <Active key={tab} />
