@@ -1,8 +1,8 @@
 import { NAV } from './nav'
 
-export function Sidebar({ path }: { path: string }) {
+export function Sidebar({ path, open = false }: { path: string; open?: boolean }) {
   return (
-  <aside className="sidebar">
+  <aside className={`sidebar ${open ? 'open' : ''}`}>
     <a className={`nav-link nav-home ${path === 'dashboard' ? 'active' : ''}`} href="#/dashboard">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="3" y="3" width="7" height="9" rx="1" />

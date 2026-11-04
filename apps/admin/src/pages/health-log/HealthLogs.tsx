@@ -17,6 +17,12 @@ import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
 import { countBy } from '@/lib/stats'
+import { symptomColors } from '@/lib/palette'
+
+function SymptomBadge({ name, color }: { name?: string; color?: string }) {
+  if (!name) return <Badge variant="secondary">-</Badge>
+  return <Badge variant="outline" style={color ? { color, background: `color-mix(in srgb, ${color} 12%, white)`, borderColor: `color-mix(in srgb, ${color} 30%, white)` } : undefined}>{name}</Badge>
+}
 
 const monthStart = () => today().slice(0, 8) + '01'
 
@@ -28,6 +34,7 @@ const blank = (): HealthLog => ({
 export default function HealthLogs() {
   const logs = useLogs()
   const { items: codes } = useCodes()
+  const symColors = useMemo(() => symptomColors(codes), [codes])
   const { items: classes } = useClasses()
   const names = nameMap(codes)
   const symptoms = codes.filter((c) => c.group === 'symptom' && c.active)
@@ -107,7 +114,7 @@ export default function HealthLogs() {
                     <TableCell>{l.time}</TableCell>
                     <TableCell>{classLabel(l.grade, l.classNo)}</TableCell>
                     <TableCell>{l.studentName}</TableCell>
-                    <TableCell><Badge variant="secondary">{names[l.symptomId] ?? '-'}</Badge></TableCell>
+                    <TableCell><SymptomBadge name={names[l.symptomId]} color={symColors[names[l.symptomId]]} /></TableCell>
                     <TableCell>
                       {l.treatment}
                       {l.medicines.length > 0 && (
@@ -130,7 +137,7 @@ export default function HealthLogs() {
         <div>
           <Card className="gap-0 p-5">
             <h2>증상분류 통계</h2>
-            <BarList items={stats.symptom} />
+            <BarList items={stats.symptom} colors={symColors} />
           </Card>
           <Card className="gap-0 p-5">
             <h2>약품 사용(출고)</h2>

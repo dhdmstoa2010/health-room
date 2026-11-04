@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useMemo, useState } from 'react'
 import { dateStr, nameMap, today, useChronic, useCodes, useLogs, usePurchases, useSchedules } from '@/lib/data'
 import { countBy, stockOf } from '@/lib/stats'
+import { symptomColors } from '@/lib/palette'
 import { BarList } from '@/components/common/bar-list'
 import { Empty } from '@/components/common/empty'
 import { PageHeader } from '@/components/common/page-header'
@@ -135,7 +136,7 @@ export default function Dashboard() {
       </Card>
 
       <div className="grid cols-2" style={{ marginTop: 16 }}>
-        <Card className="gap-0 p-5"><h2>이번 달 증상 Top 5</h2><BarList items={symptoms} /></Card>
+        <Card className="gap-0 p-5"><h2>이번 달 증상 Top 5</h2><BarList items={symptoms} colors={symptomColors(codes)} /></Card>
         <Card className="gap-0 p-5"><h2>이번 달 학년별 방문</h2><BarList items={grades} /></Card>
         <Card className="gap-0 p-5">
           <h2>재고 부족 (5 이하)</h2>

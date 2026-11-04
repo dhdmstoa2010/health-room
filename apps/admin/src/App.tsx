@@ -37,12 +37,24 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
 
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => setMenuOpen(false), [path])
+
   const Page = ROUTES[path] ?? Dashboard
 
   return (
     <div className="shell">
-      <Sidebar path={path} />
+      <Sidebar path={path} open={menuOpen} />
+      {menuOpen && <div className="sidebar-backdrop" onClick={() => setMenuOpen(false)} />}
       <div className="main">
+        <header className="topbar">
+          <button type="button" className="menu-btn" aria-label="메뉴 열기" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <b>보건실 관리</b>
+        </header>
         <main className="content"><Page key={path} /></main>
       </div>
     </div>
