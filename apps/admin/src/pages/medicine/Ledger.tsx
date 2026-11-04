@@ -1,6 +1,6 @@
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
-import { NativeSelect } from '@/components/ui/input'
+import { NativeSelect } from '@/components/ui/native-select'
 import { Badge } from '@/components/ui/badge'
 import { DatePicker } from '@/components/common/date-picker'
 import { useMemo, useState } from 'react'
@@ -37,7 +37,7 @@ export default function Ledger() {
     <>
       <PageHeader title="약품수불부" desc="약품별 입고·출고 내역" />
       <div className="grid side">
-        <Card>
+        <Card className="gap-0 p-5">
           <div className="toolbar">
             <NativeSelect value={medicineId} onChange={(e) => setMedicineId(e.target.value)}>
               {medicines.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
@@ -68,7 +68,7 @@ export default function Ledger() {
           </div>
         </Card>
 
-        <Card>
+        <Card className="gap-0 p-5">
           <h2>현재 재고</h2>
           {medicines.map((m) => {
             const s = stockOf(m.id, logs, purchases)

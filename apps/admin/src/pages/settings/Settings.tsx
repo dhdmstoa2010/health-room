@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card'
-import { Input, NativeSelect } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
+import { NativeSelect } from '@/components/ui/native-select'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { DEFAULT_SETTINGS, dateStr, useLogs, useSettings } from '@/lib/data'
@@ -54,9 +55,9 @@ export default function Settings() {
         </Field>
         <div className="toolbar" style={{ marginBottom: 0 }}>
           <Button variant="default" onClick={save}>저장</Button>
-          <Button onClick={() => setDraft({ ...DEFAULT_SETTINGS, approvalText: DEFAULT_SETTINGS.approvalLine.join(', ') })}>기본값</Button>
+          <Button variant="outline" onClick={() => setDraft({ ...DEFAULT_SETTINGS, approvalText: DEFAULT_SETTINGS.approvalLine.join(', ') })}>기본값</Button>
           <span className="spacer" />
-          <Button variant="destructive" onClick={purge}>보관기간 경과 데이터 삭제</Button>
+          <Button variant="outline" className="text-destructive" onClick={purge}>보관기간 경과 데이터 삭제</Button>
         </div>
         {message && <p style={{ marginTop: 12, color: 'var(--green-dark)' }}>{message}</p>}
       </Card>

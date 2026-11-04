@@ -34,7 +34,7 @@ export default function LogsPrint() {
         <Button variant="default" disabled={!rows.length} onClick={() => window.print()}>인쇄</Button>
       </div>
 
-      {!pages.length && <Card><Empty>해당 기간에 출력할 보건일지가 없습니다.</Empty></Card>}
+      {!pages.length && <Card className="gap-0 p-5"><Empty>해당 기간에 출력할 보건일지가 없습니다.</Empty></Card>}
       {pages.map((page, idx) => (
         <div className="sheet" key={idx}>
           <div className="sheet-head">

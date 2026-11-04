@@ -1,4 +1,4 @@
-import { NativeSelect } from '@/components/ui/input'
+import { NativeSelect } from '@/components/ui/native-select'
 import { classLabel, type ClassInfo } from '@/lib/data'
 
 export function ClassSelect({

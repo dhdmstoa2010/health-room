@@ -61,14 +61,14 @@ export default function Classes() {
         actions={
           <>
             <input ref={fileRef} type="file" accept=".xlsx" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); e.target.value = '' }} />
-            <Button onClick={() => fileRef.current?.click()}>엑셀 업로드</Button>{' '}
+            <Button variant="outline" onClick={() => fileRef.current?.click()}>엑셀 업로드</Button>{' '}
             <Button variant="default" onClick={() => setEditing({ id: uid(), grade: 1, classNo: 1, teacher: '' })}>+ 학년반 등록</Button>
           </>
         }
       />
       {message && <Card  style={{ marginBottom: 16 }}>{message}</Card>}
       <p className="muted" style={{ marginBottom: 8 }}>엑셀 양식(.xlsx): 1행 제목 / A열 학년 · B열 반 · C열 담임(선택)</p>
-      <Card className="overflow-x-auto">
+      <Card className="gap-0 p-5 overflow-x-auto">
         <Table>
           <TableHeader><TableRow><TableHead>학년반</TableHead><TableHead>담임</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
@@ -76,8 +76,8 @@ export default function Classes() {
               <TableRow key={c.id}>
                 <TableCell>{classLabel(c.grade, c.classNo)}</TableCell><TableCell>{c.teacher}</TableCell>
                 <TableCell className="actions">
-                  <Button size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
-                  <Button variant="destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(c.id)}>삭제</Button>
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(c.id)}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

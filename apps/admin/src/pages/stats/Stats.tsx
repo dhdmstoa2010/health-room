@@ -1,6 +1,6 @@
 import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
-import { NativeSelect } from '@/components/ui/input'
+import { NativeSelect } from '@/components/ui/native-select'
 import { useMemo, useState } from 'react'
 import { classLabel, nameMap, useClasses, useCodes, useLogs, useSettings } from '@/lib/data'
 import { academicMonths, currentAcademicYear } from '@/lib/stats'
@@ -21,7 +21,7 @@ type Matrix = { rows: { label: string; cells: number[]; total: number }[]; total
 
 function MatrixTable({ labels, matrix, head }: { labels: string[]; matrix: Matrix; head: string }) {
   return (
-    <Card className="overflow-x-auto">
+    <Card className="gap-0 p-5 overflow-x-auto">
       <Table>
         <TableHeader><TableRow><TableHead>{head}</TableHead>{labels.map((l) => <TableHead key={l} className="num">{l}</TableHead>)}<TableHead className="num">합계</TableHead></TableRow></TableHeader>
         <TableBody>

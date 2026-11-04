@@ -1,5 +1,7 @@
 import { Card } from '@/components/ui/card'
-import { Input, NativeSelect, Textarea } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { NativeSelect } from '@/components/ui/native-select'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/common/date-picker'
@@ -44,11 +46,11 @@ export default function Schedule() {
         actions={<Button variant="default" onClick={() => setEditing(blank())}>+ 일정 등록</Button>}
       />
       <div className="grid side">
-        <Card>
+        <Card className="gap-0 p-5">
           <div className="toolbar">
-            <Button size="sm" onClick={() => move(-1)}>‹</Button>
+            <Button variant="outline" size="sm" onClick={() => move(-1)}>‹</Button>
             <b>{cursor.y}년 {cursor.m + 1}월</b>
-            <Button size="sm" onClick={() => move(1)}>›</Button>
+            <Button variant="outline" size="sm" onClick={() => move(1)}>›</Button>
           </div>
           <div className="cal">
             {['일', '월', '화', '수', '목', '금', '토'].map((d) => <div key={d} className="dow">{d}</div>)}
@@ -66,7 +68,7 @@ export default function Schedule() {
           <p className="muted" style={{ marginTop: 8 }}>날짜를 더블클릭하면 해당 일자로 일정을 등록합니다.</p>
         </Card>
 
-        <Card>
+        <Card className="gap-0 p-5">
           <h2>기간별 조회</h2>
           <div className="toolbar">
             <DatePicker value={from} onChange={(v) => setFrom(v)} />
@@ -74,11 +76,11 @@ export default function Schedule() {
           </div>
           {rows.map((s) => (
             <div key={s.id} style={{ padding: '10px 0', borderTop: '1px solid var(--gray-100)' }}>
-              <div><Badge>{s.category}</Badge> <b>{s.title}</b></div>
+              <div><Badge variant="secondary">{s.category}</Badge> <b>{s.title}</b></div>
               <div className="muted">{s.date} {s.time}{s.content && ` · ${s.content}`}</div>
               <div style={{ marginTop: 4 }}>
-                <Button size="sm" onClick={() => setEditing({ ...s })}>수정</Button>{' '}
-                <Button variant="destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(s.id)}>삭제</Button>
+                <Button variant="outline" size="sm" onClick={() => setEditing({ ...s })}>수정</Button>{' '}
+                <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(s.id)}>삭제</Button>
               </div>
             </div>
           ))}

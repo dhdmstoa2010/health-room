@@ -1,6 +1,7 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
-import { Input, NativeSelect } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
+import { NativeSelect } from '@/components/ui/native-select'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/common/date-picker'
 import { useState } from 'react'
@@ -28,7 +29,7 @@ export default function Purchases() {
         desc="약품 구입수량 등록"
         actions={<Button variant="default" onClick={() => setEditing(blank())}>+ 구입 등록</Button>}
       />
-      <Card className="overflow-x-auto">
+      <Card className="gap-0 p-5 overflow-x-auto">
         <Table>
           <TableHeader><TableRow><TableHead>보건일자</TableHead><TableHead>약품</TableHead><TableHead className="num">구입수량</TableHead><TableHead>비고</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
@@ -36,8 +37,8 @@ export default function Purchases() {
               <TableRow key={r.id}>
                 <TableCell>{r.date}</TableCell><TableCell>{names[r.medicineId] ?? '-'}</TableCell><TableCell className="num">{r.qty}</TableCell><TableCell>{r.note}</TableCell>
                 <TableCell className="actions">
-                  <Button size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

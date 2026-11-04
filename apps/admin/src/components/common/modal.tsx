@@ -24,8 +24,8 @@ export function Modal({
           <div className="border-b border-border px-5 py-4"><DialogTitle>{title}</DialogTitle></div>
           <div className="overflow-y-auto p-5">{children}</div>
           <div className="flex justify-end gap-2 border-t border-border px-5 py-3.5">
-            <Button type="button" onClick={onClose}>취소</Button>
-            {onSubmit && <Button type="submit" variant="default">{submitLabel}</Button>}
+            <Button variant="outline" type="button" onClick={onClose}>취소</Button>
+            {onSubmit && <Button type="submit">{submitLabel}</Button>}
           </div>
         </form>
       </DialogContent>

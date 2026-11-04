@@ -1,6 +1,7 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
-import { Input, Textarea } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -29,17 +30,17 @@ export default function Chronic() {
         desc="지속 관리 대상 학생 등록"
         actions={<Button variant="default" onClick={() => setEditing(blank())}>+ 요양호자 등록</Button>}
       />
-      <Card className="overflow-x-auto">
+      <Card className="gap-0 p-5 overflow-x-auto">
         <Table>
           <TableHeader><TableRow><TableHead>학년반</TableHead><TableHead>이름</TableHead><TableHead>증상</TableHead><TableHead>병명</TableHead><TableHead>특이사항</TableHead><TableHead>등록일</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
             {rows.map((r) => (
               <TableRow key={r.id}>
                 <TableCell>{classLabel(r.grade, r.classNo)}</TableCell><TableCell>{r.studentName}</TableCell><TableCell>{r.symptom}</TableCell>
-                <TableCell><Badge>{r.disease}</Badge></TableCell><TableCell>{r.note}</TableCell><TableCell>{r.registeredAt}</TableCell>
+                <TableCell><Badge variant="secondary">{r.disease}</Badge></TableCell><TableCell>{r.note}</TableCell><TableCell>{r.registeredAt}</TableCell>
                 <TableCell className="actions">
-                  <Button size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

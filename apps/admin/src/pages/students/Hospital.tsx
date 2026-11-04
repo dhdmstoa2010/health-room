@@ -1,6 +1,8 @@
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
 import { Card } from '@/components/ui/card'
-import { Input, NativeSelect, Textarea } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { NativeSelect } from '@/components/ui/native-select'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/common/date-picker'
@@ -30,7 +32,7 @@ export default function Hospital() {
         desc="병원 이송·치료 내역 등록"
         actions={<Button variant="default" onClick={() => setEditing(blank())}>+ 병원치료 등록</Button>}
       />
-      <Card className="overflow-x-auto">
+      <Card className="gap-0 p-5 overflow-x-auto">
         <Table>
           <TableHeader><TableRow><TableHead>일자</TableHead><TableHead>학년반</TableHead><TableHead>이름</TableHead><TableHead>병원</TableHead><TableHead>이송</TableHead><TableHead>사유</TableHead><TableHead>조치사항</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
@@ -39,8 +41,8 @@ export default function Hospital() {
                 <TableCell>{r.date}</TableCell><TableCell>{classLabel(r.grade, r.classNo)}</TableCell><TableCell>{r.studentName}</TableCell>
                 <TableCell>{r.hospital}</TableCell><TableCell><Badge variant="default">{r.transport}</Badge></TableCell><TableCell>{r.reason}</TableCell><TableCell>{r.action}</TableCell>
                 <TableCell className="actions">
-                  <Button size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

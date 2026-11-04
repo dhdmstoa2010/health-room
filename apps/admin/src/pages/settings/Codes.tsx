@@ -43,18 +43,18 @@ export default function Codes() {
           <Button key={g.key} variant={group === g.key ? 'default' : 'outline'} onClick={() => setGroup(g.key)}>{g.label}</Button>
         ))}
       </div>
-      <Card className="overflow-x-auto">
+      <Card className="gap-0 p-5 overflow-x-auto">
         <Table>
           <TableHeader><TableRow><TableHead>코드명</TableHead><TableHead>상태</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
             {rows.map((c) => (
               <TableRow key={c.id}>
                 <TableCell>{c.name}</TableCell>
-                <TableCell><Badge variant={c.active ? 'secondary' : 'muted'}>{c.active ? '사용' : '사용안함'}</Badge></TableCell>
+                <TableCell><Badge variant={c.active ? 'secondary' : 'outline'}>{c.active ? '사용' : '사용안함'}</Badge></TableCell>
                 <TableCell className="actions">
-                  <Button size="sm" onClick={() => crud.save({ ...c, active: !c.active })}>{c.active ? '사용안함' : '사용'}</Button>
-                  <Button size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
-                  <Button variant="destructive" size="sm" onClick={() => remove(c)}>삭제</Button>
+                  <Button variant="outline" size="sm" onClick={() => crud.save({ ...c, active: !c.active })}>{c.active ? '사용안함' : '사용'}</Button>
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => remove(c)}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

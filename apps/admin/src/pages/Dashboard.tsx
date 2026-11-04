@@ -135,16 +135,16 @@ export default function Dashboard() {
       </Card>
 
       <div className="grid cols-2" style={{ marginTop: 16 }}>
-        <Card><h2>이번 달 증상 Top 5</h2><BarList items={symptoms} /></Card>
-        <Card><h2>이번 달 학년별 방문</h2><BarList items={grades} /></Card>
-        <Card>
+        <Card className="gap-0 p-5"><h2>이번 달 증상 Top 5</h2><BarList items={symptoms} /></Card>
+        <Card className="gap-0 p-5"><h2>이번 달 학년별 방문</h2><BarList items={grades} /></Card>
+        <Card className="gap-0 p-5">
           <h2>재고 부족 (5 이하)</h2>
           {low.map((c) => <div className="bar-row" key={c.id} style={{ gridTemplateColumns: '1fr auto' }}><span>{c.name}</span><b>{c.stock}</b></div>)}
           {!low.length && <Empty>재고 부족 약품이 없습니다.</Empty>}
         </Card>
-        <Card>
+        <Card className="gap-0 p-5">
           <h2>다가오는 일정</h2>
-          {upcoming.map((s) => <div key={s.id} style={{ padding: '6px 0' }}><Badge>{s.category}</Badge> {s.title} <span className="muted">{s.date.slice(5)} {s.time}</span></div>)}
+          {upcoming.map((s) => <div key={s.id} style={{ padding: '6px 0' }}><Badge variant="secondary">{s.category}</Badge> {s.title} <span className="muted">{s.date.slice(5)} {s.time}</span></div>)}
           {!upcoming.length && <Empty>예정된 일정이 없습니다.</Empty>}
         </Card>
       </div>
