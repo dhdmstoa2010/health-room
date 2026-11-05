@@ -9,6 +9,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 export default function Classes() {
   const crud = useClasses()
@@ -53,8 +54,10 @@ export default function Classes() {
     }
   }
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="학년반등록"
         desc="학년·반 정보 관리"
@@ -77,7 +80,7 @@ export default function Classes() {
                 <TableCell>{classLabel(c.grade, c.classNo)}</TableCell><TableCell>{c.teacher}</TableCell>
                 <TableCell className="actions">
                   <Button variant="outline" size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
-                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(c.id)}>삭제</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`학년반: ${classLabel(c.grade, c.classNo)}`, () => crud.remove(c.id))}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

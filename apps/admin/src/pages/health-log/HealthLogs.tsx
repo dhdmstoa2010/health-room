@@ -18,6 +18,7 @@ import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
 import { countBy } from '@/lib/stats'
 import { symptomColors } from '@/lib/palette'
+import { useConfirm } from '@/components/common/confirm'
 
 function SymptomBadge({ name, color }: { name?: string; color?: string }) {
   if (!name) return <Badge variant="secondary">-</Badge>
@@ -84,8 +85,10 @@ export default function HealthLogs() {
 
   const patch = (p: Partial<HealthLog>) => setEditing((e) => (e ? { ...e, ...p } : e))
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="보건일지"
         desc="방문 학생의 증상·처치 내역 관리"
@@ -124,7 +127,7 @@ export default function HealthLogs() {
                     <TableCell className="actions">
                       <Button variant="outline" size="sm" onClick={() => openEdit(l)}>수정</Button>
                       <Button variant="outline" size="sm" onClick={() => setMoving({ log: l, date: l.date })}>일자변경</Button>
-                      <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('이 보건일지를 삭제할까요?') && logs.remove(l.id)}>삭제</Button>
+                      <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`보건일지: ${l.date} ${classLabel(l.grade, l.classNo)} ${l.studentName}`, () => logs.remove(l.id))}>삭제</Button>
                     </TableCell>
                   </TableRow>
                 ))}

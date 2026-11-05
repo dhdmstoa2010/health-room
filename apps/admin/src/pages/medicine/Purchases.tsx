@@ -10,6 +10,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 const blank = (): Purchase => ({ id: uid(), date: today(), medicineId: '', qty: 1, note: '' })
 
@@ -22,8 +23,10 @@ export default function Purchases() {
   const patch = (p: Partial<Purchase>) => setEditing((e) => (e ? { ...e, ...p } : e))
   const rows = [...crud.items].sort((a, b) => b.date.localeCompare(a.date))
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="약품구입등록"
         desc="약품 구입수량 등록"
@@ -38,7 +41,7 @@ export default function Purchases() {
                 <TableCell>{r.date}</TableCell><TableCell>{names[r.medicineId] ?? '-'}</TableCell><TableCell className="num">{r.qty}</TableCell><TableCell>{r.note}</TableCell>
                 <TableCell className="actions">
                   <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`약품구입: ${r.date} ${names[r.medicineId] ?? '-'} ${r.qty}개`, () => crud.remove(r.id))}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

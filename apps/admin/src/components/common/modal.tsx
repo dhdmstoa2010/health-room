@@ -3,12 +3,13 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 export function Modal({
-  title, onClose, onSubmit, submitLabel = '저장', children,
+  title, onClose, onSubmit, submitLabel = '저장', submitVariant = 'default', children,
 }: {
   title: string
   onClose: () => void
   onSubmit?: () => void
   submitLabel?: string
+  submitVariant?: 'default' | 'destructive'
   children: ReactNode
 }) {
   return (
@@ -25,7 +26,7 @@ export function Modal({
           <div className="overflow-y-auto px-6 py-5">{children}</div>
           <div className="flex justify-end gap-2 border-t border-border px-6 py-4">
             <Button variant="outline" type="button" onClick={onClose}>취소</Button>
-            {onSubmit && <Button type="submit">{submitLabel}</Button>}
+            {onSubmit && <Button type="submit" variant={submitVariant}>{submitLabel}</Button>}
           </div>
         </form>
       </DialogContent>
