@@ -11,6 +11,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 const CATEGORIES = ['행사', '검진', '교육', '기타']
 const blank = (date = today()): ScheduleT => ({ id: uid(), date, time: '09:00', category: '행사', title: '', content: '' })
@@ -38,8 +39,10 @@ export default function Schedule() {
     return [...Array(first.getDay()).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)] as (number | null)[]
   }, [cursor])
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="일정등록/조회"
         desc="보건실 일정 등록·조회"
@@ -80,7 +83,7 @@ export default function Schedule() {
               <div className="muted">{s.date} {s.time}{s.content && ` · ${s.content}`}</div>
               <div style={{ marginTop: 4 }}>
                 <Button variant="outline" size="sm" onClick={() => setEditing({ ...s })}>수정</Button>{' '}
-                <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(s.id)}>삭제</Button>
+                <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`일정: ${s.date} ${s.title}`, () => crud.remove(s.id))}>삭제</Button>
               </div>
             </div>
           ))}

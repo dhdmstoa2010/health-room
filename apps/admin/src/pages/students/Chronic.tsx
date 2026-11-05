@@ -11,6 +11,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 const blank = (): ChronicT => ({
   id: uid(), grade: 0, classNo: 0, studentName: '', symptom: '', disease: '', note: '', registeredAt: today(),
@@ -23,8 +24,10 @@ export default function Chronic() {
   const patch = (p: Partial<ChronicT>) => setEditing((e) => (e ? { ...e, ...p } : e))
   const rows = [...crud.items].sort((a, b) => a.grade - b.grade || a.classNo - b.classNo)
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="요양호자등록"
         desc="지속 관리 대상 학생 등록"
@@ -40,7 +43,7 @@ export default function Chronic() {
                 <TableCell><Badge variant="secondary">{r.disease}</Badge></TableCell><TableCell>{r.note}</TableCell><TableCell>{r.registeredAt}</TableCell>
                 <TableCell className="actions">
                   <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`요양호자: ${classLabel(r.grade, r.classNo)} ${r.studentName} (${r.disease})`, () => crud.remove(r.id))}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

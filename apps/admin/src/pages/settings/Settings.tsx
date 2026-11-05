@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { DEFAULT_SETTINGS, dateStr, useLogs, useSettings } from '@/lib/data'
 import { Field } from '@/components/common/field'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 export default function Settings() {
   const [saved, setSaved] = useSettings()
@@ -29,16 +30,18 @@ export default function Settings() {
     const limit = dateStr(cutoff)
     const targets = logs.items.filter((l) => l.date < limit)
     if (!targets.length) return setMessage(`${limit} 이전 보건일지가 없습니다.`)
-    if (confirm(`${limit} 이전 보건일지 ${targets.length}건을 영구 삭제합니다. 계속할까요?`)) {
+    ask(`${limit} 이전 보건일지 ${targets.length}건 (영구 삭제)`, () => {
       logs.setItems((prev) => prev.filter((l) => l.date >= limit))
       setMessage(`${targets.length}건을 삭제했습니다.`)
-    }
+    })
   }
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader title="환경설정" desc="운영 기준값 설정" />
-      <Card  style={{ maxWidth: 560 }}>
+      <Card className="gap-0 p-5" style={{ maxWidth: 560 }}>
         <Field label="보건일지 생성 건수" hint="일괄출력 시 1장에 표시할 행 수">
           <input type="number" className="input" min={1} max={100} value={draft.dailyRows} onChange={(e) => setDraft({ ...draft, dailyRows: Number(e.target.value) })} />
         </Field>

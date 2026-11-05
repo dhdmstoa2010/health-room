@@ -9,6 +9,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 const GROUPS: { key: Code['group']; label: string }[] = [
   { key: 'symptom', label: '증상분류' },
@@ -28,11 +29,13 @@ export default function Codes() {
 
   const remove = (c: Code) => {
     if (inUse(c.id)) return alert('보건일지/구입 내역에서 사용 중인 코드는 삭제할 수 없습니다. 대신 "사용안함"으로 변경하세요.')
-    if (confirm(`'${c.name}' 코드를 삭제할까요?`)) crud.remove(c.id)
+    ask(`코드: ${c.name}`, () => crud.remove(c.id))
   }
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="공통코드등록"
         desc="증상분류·처치약품 코드 관리"

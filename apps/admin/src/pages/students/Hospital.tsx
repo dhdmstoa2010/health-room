@@ -13,6 +13,7 @@ import { Empty } from '@/components/common/empty'
 import { Field } from '@/components/common/field'
 import { Modal } from '@/components/common/modal'
 import { PageHeader } from '@/components/common/page-header'
+import { useConfirm } from '@/components/common/confirm'
 
 const blank = (): HospitalCare => ({
   id: uid(), date: today(), grade: 0, classNo: 0, studentName: '', hospital: '', transport: '119', reason: '', action: '',
@@ -25,8 +26,10 @@ export default function Hospital() {
   const patch = (p: Partial<HospitalCare>) => setEditing((e) => (e ? { ...e, ...p } : e))
   const rows = [...crud.items].sort((a, b) => b.date.localeCompare(a.date))
 
+  const { ask, dialog } = useConfirm()
   return (
     <>
+      {dialog}
       <PageHeader
         title="병원치료등록"
         desc="병원 이송·치료 내역 등록"
@@ -42,7 +45,7 @@ export default function Hospital() {
                 <TableCell>{r.hospital}</TableCell><TableCell><Badge variant="default">{r.transport}</Badge></TableCell><TableCell>{r.reason}</TableCell><TableCell>{r.action}</TableCell>
                 <TableCell className="actions">
                   <Button variant="outline" size="sm" onClick={() => setEditing({ ...r })}>수정</Button>
-                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(r.id)}>삭제</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => ask(`병원치료: ${r.date} ${classLabel(r.grade, r.classNo)} ${r.studentName}`, () => crud.remove(r.id))}>삭제</Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -119,7 +119,7 @@ export default function Dashboard() {
         <div className="stat"><span>재고 부족 약품</span><strong>{low.length}</strong></div>
       </div>
 
-      <Card  style={{ marginTop: 16 }}>
+      <Card className="gap-0 p-5" style={{ marginTop: 16 }}>
         <div className="toolbar" style={{ marginBottom: 4 }}>
           <h2 style={{ margin: 0 }}>일별 방문 학생 수</h2>
           <span className="spacer" />
