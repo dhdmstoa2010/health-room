@@ -19,6 +19,7 @@ import { PageHeader } from '@/components/common/page-header'
 import { countBy } from '@/lib/stats'
 import { symptomColors } from '@/lib/palette'
 import { useConfirm } from '@/components/common/confirm'
+import { SearchInput } from '@/components/common/search-input'
 
 function SymptomBadge({ name, color }: { name?: string; color?: string }) {
   if (!name) return <Badge variant="secondary">-</Badge>
@@ -101,7 +102,7 @@ export default function HealthLogs() {
             <DatePicker value={from} onChange={(v) => setFrom(v)} />
             <span>~</span>
             <DatePicker value={to} onChange={(v) => setTo(v)} />
-            <Input placeholder="학생 이름 / 처치 검색" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+            <SearchInput placeholder="학생 이름 / 처치 검색" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
             <span className="spacer" />
             <span className="muted">총 {rows.length}건</span>
           </div>
