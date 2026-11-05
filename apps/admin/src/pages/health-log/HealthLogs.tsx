@@ -1,10 +1,28 @@
-import { DatePicker } from '../DatePicker'
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { NativeSelect } from '@/components/ui/native-select'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/common/date-picker'
 import { useMemo, useState } from 'react'
 import {
   classLabel, nameMap, today, uid, useClasses, useCodes, useLogs, type HealthLog,
-} from '../data'
-import { BarList, ClassSelect, Empty, Field, Modal, PageHeader } from '../ui'
-import { countBy } from '../stats'
+} from '@/lib/data'
+import { BarList } from '@/components/common/bar-list'
+import { ClassSelect } from '@/components/common/class-select'
+import { Empty } from '@/components/common/empty'
+import { Field } from '@/components/common/field'
+import { Modal } from '@/components/common/modal'
+import { PageHeader } from '@/components/common/page-header'
+import { countBy } from '@/lib/stats'
+import { symptomColors } from '@/lib/palette'
+
+function SymptomBadge({ name, color }: { name?: string; color?: string }) {
+  if (!name) return <Badge variant="secondary">-</Badge>
+  return <Badge variant="outline" style={color ? { color, background: `color-mix(in srgb, ${color} 12%, white)`, borderColor: `color-mix(in srgb, ${color} 30%, white)` } : undefined}>{name}</Badge>
+}
 
 const monthStart = () => today().slice(0, 8) + '01'
 
@@ -16,6 +34,7 @@ const blank = (): HealthLog => ({
 export default function HealthLogs() {
   const logs = useLogs()
   const { items: codes } = useCodes()
+  const symColors = useMemo(() => symptomColors(codes), [codes])
   const { items: classes } = useClasses()
   const names = nameMap(codes)
   const symptoms = codes.filter((c) => c.group === 'symptom' && c.active)
@@ -70,61 +89,61 @@ export default function HealthLogs() {
       <PageHeader
         title="보건일지"
         desc="방문 학생의 증상·처치 내역 관리"
-        actions={<button className="btn primary" onClick={openNew}>+ 보건일지 등록</button>}
+        actions={<Button variant="default" onClick={openNew}>+ 보건일지 등록</Button>}
       />
 
       <div className="grid side">
-        <div className="card">
+        <Card className="gap-0 p-5">
           <div className="toolbar">
             <DatePicker value={from} onChange={(v) => setFrom(v)} />
             <span>~</span>
             <DatePicker value={to} onChange={(v) => setTo(v)} />
-            <input className="input" placeholder="학생 이름 / 처치 검색" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
+            <Input placeholder="학생 이름 / 처치 검색" value={keyword} onChange={(e) => setKeyword(e.target.value)} />
             <span className="spacer" />
             <span className="muted">총 {rows.length}건</span>
           </div>
           <div className="table-wrap">
-            <table className="table">
-              <thead>
-                <tr><th>일자</th><th>시간</th><th>학년반</th><th>이름</th><th>증상분류</th><th>처치 / 약품</th><th /></tr>
-              </thead>
-              <tbody>
+            <Table>
+              <TableHeader>
+                <TableRow><TableHead>일자</TableHead><TableHead>시간</TableHead><TableHead>학년반</TableHead><TableHead>이름</TableHead><TableHead>증상분류</TableHead><TableHead>처치 / 약품</TableHead><TableHead /></TableRow>
+              </TableHeader>
+              <TableBody>
                 {rows.map((l) => (
-                  <tr key={l.id}>
-                    <td>{l.date}</td>
-                    <td>{l.time}</td>
-                    <td>{classLabel(l.grade, l.classNo)}</td>
-                    <td>{l.studentName}</td>
-                    <td><span className="badge">{names[l.symptomId] ?? '-'}</span></td>
-                    <td>
+                  <TableRow key={l.id}>
+                    <TableCell>{l.date}</TableCell>
+                    <TableCell>{l.time}</TableCell>
+                    <TableCell>{classLabel(l.grade, l.classNo)}</TableCell>
+                    <TableCell>{l.studentName}</TableCell>
+                    <TableCell><SymptomBadge name={names[l.symptomId]} color={symColors[names[l.symptomId]]} /></TableCell>
+                    <TableCell>
                       {l.treatment}
                       {l.medicines.length > 0 && (
                         <div className="muted">{l.medicines.map((m) => `${names[m.medicineId] ?? '?'} ${m.qty}`).join(', ')}</div>
                       )}
-                    </td>
-                    <td className="actions">
-                      <button className="btn sm" onClick={() => openEdit(l)}>수정</button>
-                      <button className="btn sm" onClick={() => setMoving({ log: l, date: l.date })}>일자변경</button>
-                      <button className="btn sm danger" onClick={() => confirm('이 보건일지를 삭제할까요?') && logs.remove(l.id)}>삭제</button>
-                    </td>
-                  </tr>
+                    </TableCell>
+                    <TableCell className="actions">
+                      <Button variant="outline" size="sm" onClick={() => openEdit(l)}>수정</Button>
+                      <Button variant="outline" size="sm" onClick={() => setMoving({ log: l, date: l.date })}>일자변경</Button>
+                      <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('이 보건일지를 삭제할까요?') && logs.remove(l.id)}>삭제</Button>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
             {!rows.length && <Empty>조회된 보건일지가 없습니다.</Empty>}
           </div>
-        </div>
+        </Card>
 
         <div>
-          <div className="card">
+          <Card className="gap-0 p-5">
             <h2>증상분류 통계</h2>
-            <BarList items={stats.symptom} />
-          </div>
-          <div className="card">
+            <BarList items={stats.symptom} colors={symColors} />
+          </Card>
+          <Card className="gap-0 p-5">
             <h2>약품 사용(출고)</h2>
             <BarList items={stats.medicine} />
-            <button className="btn sm" style={{ marginTop: 12 }} onClick={() => setStatTick((t) => t + 1)}>통계 재계산</button>
-          </div>
+            <Button variant="outline" size="sm" style={{ marginTop: 12 }} onClick={() => setStatTick((t) => t + 1)}>통계 재계산</Button>
+          </Card>
         </div>
       </div>
 
@@ -138,31 +157,31 @@ export default function HealthLogs() {
             <Field label="학년반">
               <ClassSelect classes={classes} grade={editing.grade} classNo={editing.classNo} onChange={(g, c) => patch({ grade: g, classNo: c })} />
             </Field>
-            <Field label="학생 이름"><input className="input" value={editing.studentName} onChange={(e) => patch({ studentName: e.target.value })} /></Field>
+            <Field label="학생 이름"><Input value={editing.studentName} onChange={(e) => patch({ studentName: e.target.value })} /></Field>
           </div>
           <Field label="증상분류">
-            <select className="input" value={editing.symptomId} onChange={(e) => patch({ symptomId: e.target.value })}>
+            <NativeSelect value={editing.symptomId} onChange={(e) => patch({ symptomId: e.target.value })}>
               <option value="">선택</option>
               {symptoms.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
+            </NativeSelect>
           </Field>
           <Field label="처치 내용">
-            <textarea className="input" value={editing.treatment} onChange={(e) => patch({ treatment: e.target.value })} />
+            <Textarea value={editing.treatment} onChange={(e) => patch({ treatment: e.target.value })} />
           </Field>
           <Field label="처치 약품">
             {editing.medicines.map((m, i) => (
               <div className="row" key={i} style={{ marginBottom: 6 }}>
-                <select className="input" value={m.medicineId} onChange={(e) => patch({ medicines: editing.medicines.map((x, j) => (j === i ? { ...x, medicineId: e.target.value } : x)) })}>
+                <NativeSelect value={m.medicineId} onChange={(e) => patch({ medicines: editing.medicines.map((x, j) => (j === i ? { ...x, medicineId: e.target.value } : x)) })}>
                   <option value="">약품 선택</option>
                   {medicines.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-                </select>
+                </NativeSelect>
                 <input type="number" min={1} className="input" value={m.qty} onChange={(e) => patch({ medicines: editing.medicines.map((x, j) => (j === i ? { ...x, qty: Number(e.target.value) } : x)) })} />
-                <button type="button" className="btn sm" style={{ flex: '0 0 auto' }} onClick={() => patch({ medicines: editing.medicines.filter((_, j) => j !== i) })}>삭제</button>
+                <Button variant="outline" type="button" size="sm" style={{ flex: '0 0 auto' }} onClick={() => patch({ medicines: editing.medicines.filter((_, j) => j !== i) })}>삭제</Button>
               </div>
             ))}
-            <div><button type="button" className="btn sm" onClick={() => patch({ medicines: [...editing.medicines, { medicineId: '', qty: 1 }] })}>+ 약품 추가</button></div>
+            <div><Button variant="outline" type="button" size="sm" onClick={() => patch({ medicines: [...editing.medicines, { medicineId: '', qty: 1 }] })}>+ 약품 추가</Button></div>
           </Field>
-          <Field label="비고"><input className="input" value={editing.note} onChange={(e) => patch({ note: e.target.value })} /></Field>
+          <Field label="비고"><Input value={editing.note} onChange={(e) => patch({ note: e.target.value })} /></Field>
         </Modal>
       )}
 

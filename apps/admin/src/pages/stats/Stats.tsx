@@ -1,16 +1,19 @@
+import { Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Card } from '@/components/ui/card'
+import { NativeSelect } from '@/components/ui/native-select'
 import { useMemo, useState } from 'react'
-import { classLabel, nameMap, useClasses, useCodes, useLogs, useSettings } from '../data'
-import { academicMonths, currentAcademicYear } from '../stats'
-import { PageHeader } from '../ui'
+import { classLabel, nameMap, useClasses, useCodes, useLogs, useSettings } from '@/lib/data'
+import { academicMonths, currentAcademicYear } from '@/lib/stats'
+import { PageHeader } from '@/components/common/page-header'
 
 function YearPicker({ year, setYear, resetMonth }: { year: number; setYear: (y: number) => void; resetMonth: number }) {
   const base = currentAcademicYear(resetMonth)
   return (
-    <select className="input" value={year} onChange={(e) => setYear(Number(e.target.value))}>
+    <NativeSelect value={year} onChange={(e) => setYear(Number(e.target.value))}>
       {[0, 1, 2, 3, 4].map((i) => (
         <option key={i} value={base - i}>{base - i}학년도 ({resetMonth}월 ~ {resetMonth === 1 ? 12 : resetMonth - 1}월)</option>
       ))}
-    </select>
+    </NativeSelect>
   )
 }
 
@@ -18,21 +21,21 @@ type Matrix = { rows: { label: string; cells: number[]; total: number }[]; total
 
 function MatrixTable({ labels, matrix, head }: { labels: string[]; matrix: Matrix; head: string }) {
   return (
-    <div className="card table-wrap">
-      <table className="table">
-        <thead><tr><th>{head}</th>{labels.map((l) => <th key={l} className="num">{l}</th>)}<th className="num">합계</th></tr></thead>
-        <tbody>
+    <Card className="gap-0 p-5 overflow-x-auto">
+      <Table>
+        <TableHeader><TableRow><TableHead>{head}</TableHead>{labels.map((l) => <TableHead key={l} className="num">{l}</TableHead>)}<TableHead className="num">합계</TableHead></TableRow></TableHeader>
+        <TableBody>
           {matrix.rows.map((r) => (
-            <tr key={r.label}>
-              <td>{r.label}</td>
-              {r.cells.map((c, i) => <td key={i} className="num" style={c ? undefined : { color: 'var(--gray-300)' }}>{c}</td>)}
-              <td className="num"><b>{r.total}</b></td>
-            </tr>
+            <TableRow key={r.label}>
+              <TableCell>{r.label}</TableCell>
+              {r.cells.map((c, i) => <TableCell key={i} className="num" style={c ? undefined : { color: 'var(--gray-300)' }}>{c}</TableCell>)}
+              <TableCell className="num"><b>{r.total}</b></TableCell>
+            </TableRow>
           ))}
-        </tbody>
-        <tfoot><tr><td>합계</td>{matrix.totals.map((c, i) => <td key={i} className="num">{c}</td>)}<td className="num">{matrix.grand}</td></tr></tfoot>
-      </table>
-    </div>
+        </TableBody>
+        <TableFooter><TableRow><TableCell>합계</TableCell>{matrix.totals.map((c, i) => <TableCell key={i} className="num">{c}</TableCell>)}<TableCell className="num">{matrix.grand}</TableCell></TableRow></TableFooter>
+      </Table>
+    </Card>
   )
 }
 
@@ -70,10 +73,10 @@ export function StatsByClass() {
       <PageHeader title="학년반통계" desc="학년반별 월간 이용 건수" />
       <div className="toolbar">
         <YearPicker year={year} setYear={setYear} resetMonth={settings.statsResetMonth} />
-        <select className="input" value={mode} onChange={(e) => setMode(e.target.value as 'class' | 'grade')}>
+        <NativeSelect value={mode} onChange={(e) => setMode(e.target.value as 'class' | 'grade')}>
           <option value="class">학년반별</option>
           <option value="grade">학년별</option>
-        </select>
+        </NativeSelect>
       </div>
       <MatrixTable head={mode === 'class' ? '학년반' : '학년'} labels={months.map((m) => m.label)} matrix={matrix} />
     </>

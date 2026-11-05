@@ -1,16 +1,16 @@
 import { useEffect, useState, type ComponentType } from 'react'
-import { NAV } from './nav'
-import Chronic from './pages/Chronic'
-import Classes from './pages/Classes'
-import Dashboard from './pages/Dashboard'
-import HealthLogs from './pages/HealthLogs'
-import Hospital from './pages/Hospital'
-import Ledger from './pages/Ledger'
-import LogsPrint from './pages/LogsPrint'
-import Purchases from './pages/Purchases'
-import Schedule from './pages/Schedule'
-import SettingsHub from './pages/SettingsHub'
-import { StatsByClass, StatsBySymptom } from './pages/Stats'
+import { Sidebar } from '@/layout/Sidebar'
+import Chronic from '@/pages/students/Chronic'
+import Classes from '@/pages/Classes'
+import Dashboard from '@/pages/Dashboard'
+import HealthLogs from '@/pages/health-log/HealthLogs'
+import Hospital from '@/pages/students/Hospital'
+import Ledger from '@/pages/medicine/Ledger'
+import LogsPrint from '@/pages/health-log/LogsPrint'
+import Purchases from '@/pages/medicine/Purchases'
+import Schedule from '@/pages/Schedule'
+import SettingsHub from '@/pages/settings/SettingsHub'
+import { StatsByClass, StatsBySymptom } from '@/pages/stats/Stats'
 
 const ROUTES: Record<string, ComponentType> = {
   dashboard: Dashboard,
@@ -37,39 +37,24 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
 
+  const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => setMenuOpen(false), [path])
+
   const Page = ROUTES[path] ?? Dashboard
 
   return (
     <div className="shell">
-      <aside className="sidebar">
-        <a className={`nav-link nav-home ${path === 'dashboard' ? 'active' : ''}`} href="#/dashboard">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="7" height="9" rx="1" />
-            <rect x="14" y="3" width="7" height="5" rx="1" />
-            <rect x="14" y="12" width="7" height="9" rx="1" />
-            <rect x="3" y="16" width="7" height="5" rx="1" />
-          </svg>
-          대시보드
-        </a>
-        {NAV.map((g) => (
-          <div className="nav-group" key={g.group}>
-            <h3>{g.group}</h3>
-            {g.items.map((i) => (
-              <a key={i.path} className={`nav-link ${path === i.path ? 'active' : ''}`} href={`#/${i.path}`}>{i.label}</a>
-            ))}
-          </div>
-        ))}
-        <div className="nav-bottom">
-          <a className={`nav-link with-icon ${path === 'settings' ? 'active' : ''}`} href="#/settings">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="3" />
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-            </svg>
-            설정
-          </a>
-        </div>
-      </aside>
+      <Sidebar path={path} open={menuOpen} />
+      {menuOpen && <div className="sidebar-backdrop" onClick={() => setMenuOpen(false)} />}
       <div className="main">
+        <header className="topbar">
+          <button type="button" className="menu-btn" aria-label="메뉴 열기" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <b>보건실 관리</b>
+        </header>
         <main className="content"><Page key={path} /></main>
       </div>
     </div>

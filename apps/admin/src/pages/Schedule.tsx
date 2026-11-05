@@ -1,7 +1,16 @@
-import { DatePicker } from '../DatePicker'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { NativeSelect } from '@/components/ui/native-select'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/common/date-picker'
 import { useMemo, useState } from 'react'
-import { dateStr, pad, today, uid, useSchedules, type Schedule as ScheduleT } from '../data'
-import { Empty, Field, Modal, PageHeader } from '../ui'
+import { dateStr, pad, today, uid, useSchedules, type Schedule as ScheduleT } from '@/lib/data'
+import { Empty } from '@/components/common/empty'
+import { Field } from '@/components/common/field'
+import { Modal } from '@/components/common/modal'
+import { PageHeader } from '@/components/common/page-header'
 
 const CATEGORIES = ['행사', '검진', '교육', '기타']
 const blank = (date = today()): ScheduleT => ({ id: uid(), date, time: '09:00', category: '행사', title: '', content: '' })
@@ -34,14 +43,14 @@ export default function Schedule() {
       <PageHeader
         title="일정등록/조회"
         desc="보건실 일정 등록·조회"
-        actions={<button className="btn primary" onClick={() => setEditing(blank())}>+ 일정 등록</button>}
+        actions={<Button variant="default" onClick={() => setEditing(blank())}>+ 일정 등록</Button>}
       />
       <div className="grid side">
-        <div className="card">
+        <Card className="gap-0 p-5">
           <div className="toolbar">
-            <button className="btn sm" onClick={() => move(-1)}>‹</button>
+            <Button variant="outline" size="sm" onClick={() => move(-1)}>‹</Button>
             <b>{cursor.y}년 {cursor.m + 1}월</b>
-            <button className="btn sm" onClick={() => move(1)}>›</button>
+            <Button variant="outline" size="sm" onClick={() => move(1)}>›</Button>
           </div>
           <div className="cal">
             {['일', '월', '화', '수', '목', '금', '토'].map((d) => <div key={d} className="dow">{d}</div>)}
@@ -57,9 +66,9 @@ export default function Schedule() {
             })}
           </div>
           <p className="muted" style={{ marginTop: 8 }}>날짜를 더블클릭하면 해당 일자로 일정을 등록합니다.</p>
-        </div>
+        </Card>
 
-        <div className="card">
+        <Card className="gap-0 p-5">
           <h2>기간별 조회</h2>
           <div className="toolbar">
             <DatePicker value={from} onChange={(v) => setFrom(v)} />
@@ -67,16 +76,16 @@ export default function Schedule() {
           </div>
           {rows.map((s) => (
             <div key={s.id} style={{ padding: '10px 0', borderTop: '1px solid var(--gray-100)' }}>
-              <div><span className="badge">{s.category}</span> <b>{s.title}</b></div>
+              <div><Badge variant="secondary">{s.category}</Badge> <b>{s.title}</b></div>
               <div className="muted">{s.date} {s.time}{s.content && ` · ${s.content}`}</div>
               <div style={{ marginTop: 4 }}>
-                <button className="btn sm" onClick={() => setEditing({ ...s })}>수정</button>{' '}
-                <button className="btn sm danger" onClick={() => confirm('삭제할까요?') && crud.remove(s.id)}>삭제</button>
+                <Button variant="outline" size="sm" onClick={() => setEditing({ ...s })}>수정</Button>{' '}
+                <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(s.id)}>삭제</Button>
               </div>
             </div>
           ))}
           {!rows.length && <Empty>일정이 없습니다.</Empty>}
-        </div>
+        </Card>
       </div>
 
       {editing && (
@@ -94,12 +103,12 @@ export default function Schedule() {
             <Field label="시간"><input type="time" className="input" value={editing.time} onChange={(e) => patch({ time: e.target.value })} /></Field>
           </div>
           <Field label="구분">
-            <select className="input" value={editing.category} onChange={(e) => patch({ category: e.target.value })}>
+            <NativeSelect value={editing.category} onChange={(e) => patch({ category: e.target.value })}>
               {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
-            </select>
+            </NativeSelect>
           </Field>
-          <Field label="제목"><input className="input" value={editing.title} onChange={(e) => patch({ title: e.target.value })} /></Field>
-          <Field label="내용"><textarea className="input" value={editing.content} onChange={(e) => patch({ content: e.target.value })} /></Field>
+          <Field label="제목"><Input value={editing.title} onChange={(e) => patch({ title: e.target.value })} /></Field>
+          <Field label="내용"><Textarea value={editing.content} onChange={(e) => patch({ content: e.target.value })} /></Field>
         </Modal>
       )}
     </>

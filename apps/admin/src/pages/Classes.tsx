@@ -1,7 +1,14 @@
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table'
+import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { useRef, useState } from 'react'
 import { readSheet } from 'read-excel-file/browser'
-import { classLabel, uid, useClasses, type ClassInfo } from '../data'
-import { Empty, Field, Modal, PageHeader } from '../ui'
+import { classLabel, uid, useClasses, type ClassInfo } from '@/lib/data'
+import { Empty } from '@/components/common/empty'
+import { Field } from '@/components/common/field'
+import { Modal } from '@/components/common/modal'
+import { PageHeader } from '@/components/common/page-header'
 
 export default function Classes() {
   const crud = useClasses()
@@ -54,30 +61,30 @@ export default function Classes() {
         actions={
           <>
             <input ref={fileRef} type="file" accept=".xlsx" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); e.target.value = '' }} />
-            <button className="btn" onClick={() => fileRef.current?.click()}>엑셀 업로드</button>{' '}
-            <button className="btn primary" onClick={() => setEditing({ id: uid(), grade: 1, classNo: 1, teacher: '' })}>+ 학년반 등록</button>
+            <Button variant="outline" onClick={() => fileRef.current?.click()}>엑셀 업로드</Button>{' '}
+            <Button variant="default" onClick={() => setEditing({ id: uid(), grade: 1, classNo: 1, teacher: '' })}>+ 학년반 등록</Button>
           </>
         }
       />
-      {message && <div className="card" style={{ marginBottom: 16 }}>{message}</div>}
+      {message && <Card  style={{ marginBottom: 16 }}>{message}</Card>}
       <p className="muted" style={{ marginBottom: 8 }}>엑셀 양식(.xlsx): 1행 제목 / A열 학년 · B열 반 · C열 담임(선택)</p>
-      <div className="card table-wrap">
-        <table className="table">
-          <thead><tr><th>학년반</th><th>담임</th><th /></tr></thead>
-          <tbody>
+      <Card className="gap-0 p-5 overflow-x-auto">
+        <Table>
+          <TableHeader><TableRow><TableHead>학년반</TableHead><TableHead>담임</TableHead><TableHead /></TableRow></TableHeader>
+          <TableBody>
             {rows.map((c) => (
-              <tr key={c.id}>
-                <td>{classLabel(c.grade, c.classNo)}</td><td>{c.teacher}</td>
-                <td className="actions">
-                  <button className="btn sm" onClick={() => setEditing({ ...c })}>수정</button>
-                  <button className="btn sm danger" onClick={() => confirm('삭제할까요?') && crud.remove(c.id)}>삭제</button>
-                </td>
-              </tr>
+              <TableRow key={c.id}>
+                <TableCell>{classLabel(c.grade, c.classNo)}</TableCell><TableCell>{c.teacher}</TableCell>
+                <TableCell className="actions">
+                  <Button variant="outline" size="sm" onClick={() => setEditing({ ...c })}>수정</Button>
+                  <Button variant="outline" className="text-destructive" size="sm" onClick={() => confirm('삭제할까요?') && crud.remove(c.id)}>삭제</Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
         {!rows.length && <Empty>등록된 학년반이 없습니다.</Empty>}
-      </div>
+      </Card>
 
       {editing && (
         <Modal title="학년반" onClose={() => setEditing(null)} onSubmit={save}>
@@ -85,7 +92,7 @@ export default function Classes() {
             <Field label="학년"><input type="number" min={1} className="input" value={editing.grade} onChange={(e) => setEditing({ ...editing, grade: Number(e.target.value) })} /></Field>
             <Field label="반"><input type="number" min={1} className="input" value={editing.classNo} onChange={(e) => setEditing({ ...editing, classNo: Number(e.target.value) })} /></Field>
           </div>
-          <Field label="담임"><input className="input" value={editing.teacher} onChange={(e) => setEditing({ ...editing, teacher: e.target.value })} /></Field>
+          <Field label="담임"><Input value={editing.teacher} onChange={(e) => setEditing({ ...editing, teacher: e.target.value })} /></Field>
         </Modal>
       )}
     </>

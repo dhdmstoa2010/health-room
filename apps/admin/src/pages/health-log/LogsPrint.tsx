@@ -1,7 +1,10 @@
-import { DatePicker } from '../DatePicker'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/common/date-picker'
 import { useMemo, useState } from 'react'
-import { classLabel, nameMap, today, useCodes, useLogs, useSettings } from '../data'
-import { Empty, PageHeader } from '../ui'
+import { classLabel, nameMap, today, useCodes, useLogs, useSettings } from '@/lib/data'
+import { Empty } from '@/components/common/empty'
+import { PageHeader } from '@/components/common/page-header'
 
 export default function LogsPrint() {
   const { items: logs } = useLogs()
@@ -28,10 +31,10 @@ export default function LogsPrint() {
         <DatePicker value={to} onChange={(v) => setTo(v)} />
         <span className="muted">{rows.length}건 · {pages.length}장</span>
         <span className="spacer" />
-        <button className="btn primary" disabled={!rows.length} onClick={() => window.print()}>인쇄</button>
+        <Button variant="default" disabled={!rows.length} onClick={() => window.print()}>인쇄</Button>
       </div>
 
-      {!pages.length && <div className="card"><Empty>해당 기간에 출력할 보건일지가 없습니다.</Empty></div>}
+      {!pages.length && <Card className="gap-0 p-5"><Empty>해당 기간에 출력할 보건일지가 없습니다.</Empty></Card>}
       {pages.map((page, idx) => (
         <div className="sheet" key={idx}>
           <div className="sheet-head">
