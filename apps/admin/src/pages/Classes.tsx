@@ -66,7 +66,7 @@ export default function Classes() {
           </>
         }
       />
-      {message && <Card  style={{ marginBottom: 16 }}>{message}</Card>}
+      {message && <Card className="gap-0 p-5" style={{ marginBottom: 16 }}>{message}</Card>}
       <p className="muted" style={{ marginBottom: 8 }}>엑셀 양식(.xlsx): 1행 제목 / A열 학년 · B열 반 · C열 담임(선택)</p>
       <Card className="gap-0 p-5 overflow-x-auto">
         <Table>

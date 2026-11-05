@@ -182,7 +182,7 @@ table.table { width: 100%; border-collapse: collapse; }
 .approval th, .approval td { border: 1px solid var(--black); text-align: center; padding: 2px 14px; font-size: 12px; font-weight: 500; }
 .approval td { height: 44px; }
 .sheet table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.sheet th, .sheet td { border: 1px solid var(--black); padding: 4px 6px; height: 26px; }
+.sheet th, .sheet td { border: 1px solid var(--black); padding: 4px 10px; height: 28px; line-height: 1.4; vertical-align: middle; }
 .sheet th { background: var(--gray-100); }
 .sheet table.approval { width: auto; flex: none; }
 .sheet table.approval th { min-width: 56px; }

@@ -38,7 +38,7 @@ export default function Settings() {
   return (
     <>
       <PageHeader title="환경설정" desc="운영 기준값 설정" />
-      <Card  style={{ maxWidth: 560 }}>
+      <Card className="gap-0 p-5" style={{ maxWidth: 560 }}>
         <Field label="보건일지 생성 건수" hint="일괄출력 시 1장에 표시할 행 수">
           <input type="number" className="input" min={1} max={100} value={draft.dailyRows} onChange={(e) => setDraft({ ...draft, dailyRows: Number(e.target.value) })} />
         </Field>

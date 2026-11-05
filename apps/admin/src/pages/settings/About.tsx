@@ -14,7 +14,7 @@ export default function About() {
   return (
     <>
       <PageHeader title="프로그램정보" desc="버전·제작사 정보" />
-      <Card  style={{ maxWidth: 560 }}>
+      <Card className="gap-0 p-5" style={{ maxWidth: 560 }}>
         <Table>
           <TableBody>
             {INFO.map(([k, v]) => (
