@@ -1,3 +1,5 @@
+import { LogOut } from 'lucide-react'
+import { logout } from '@/lib/auth'
 import { NAV } from './nav'
 
 export function Sidebar({ path, open = false }: { path: string; open?: boolean }) {
@@ -28,6 +30,10 @@ export function Sidebar({ path, open = false }: { path: string; open?: boolean }
         </svg>
         설정
       </a>
+      <button type="button" className="nav-link with-icon w-full text-left" onClick={logout}>
+        <LogOut size={16} aria-hidden="true" />
+        로그아웃
+      </button>
     </div>
   </aside>
   )
