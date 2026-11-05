@@ -1,5 +1,7 @@
 import { useEffect, useState, type ComponentType } from 'react'
 import { Sidebar } from '@/layout/Sidebar'
+import { useAuthed } from '@/lib/auth'
+import Login from '@/pages/Login'
 import Chronic from '@/pages/students/Chronic'
 import Classes from '@/pages/Classes'
 import Dashboard from '@/pages/Dashboard'
@@ -30,6 +32,11 @@ const ROUTES: Record<string, ComponentType> = {
 const currentPath = () => window.location.hash.replace(/^#\/?/, '').split('/')[0] || 'dashboard'
 
 export default function App() {
+  const authed = useAuthed()
+  return authed ? <AdminShell /> : <Login />
+}
+
+function AdminShell() {
   const [path, setPath] = useState(currentPath)
   useEffect(() => {
     const onChange = () => setPath(currentPath())
